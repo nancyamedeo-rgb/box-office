@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Box Office Widget</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: transparent; }
+  #widget {
+    width: 100%;
+    background: transparent;
+    font-family: sans-serif;
+    overflow: hidden;
+    position: relative;
+    height: 520px;
+  }
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 0 14px 0;
+    border-bottom: 0.5px solid rgba(255,255,255,0.18);
+    margin-bottom: 8px;
+  }
+  .header-title {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+  }
+  .header-dot { width: 6px; height: 6px; border-radius: 50%; background: #f5c518; flex-shrink: 0; }
+  .last-updated { margin-left: auto; font-size: 11px; color: rgba(255,255,255,0.35); }
+  .scroll-viewport { overflow: hidden; height: 460px; position: relative; }
+  .scroll-track { display: flex; flex-direction: column; gap: 0; }
+  .movie-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 0.5px solid rgba(255,255,255,0.08);
+    gap: 12px;
+    flex-shrink: 0;
+    min-height: 62px;
+  }
+  .rank { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.28); width: 20px; text-align: right; flex-shrink: 0; }
+  .rank.top3 { color: #f5c518; }
+  .movie-info { flex: 1; min-width: 0; }
+  .movie-title { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.92); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
+  .movie-meta { font-size: 11px; color: rgba(255,255,255,0.38); margin-top: 2px; }
+  .movie-gross { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.8); text-align: right; flex-shrink: 0; min-width: 80px; }
+  .bar-wrap { width: 60px; height: 3px; background: rgba(255,255,255,0.07); border-radius: 2px; flex-shrink: 0; }
+  .bar { height: 3px; border-radius: 2px; background: #f5c518; }
+  .badge { font-size: 10px; font-weight: 500; padding: 2px 6px; border-radius: 3px; margin-left: 6px; vertical-align: middle; flex-shrink: 0; }
+  .badge-new { background: rgba(245,197,24,0.18); color: #f5c518; }
+  .loading { color: rgba(255,255,255,0.4); font-size: 13px; text-align: center; padding: 2rem 0; }
+  .error { color: rgba(255,120,100,0.75); font-size: 12px; text-align: center; padding: 2rem 0; }
+</style>
+</head>
+<body>
+
+<div id="widget">
+  <div class="header">
+    <div class="header-dot"></div>
+    <span class="header-title">Now in theaters</span>
+    <span class="last-updated" id="updated-time"></span>
+  </div>
+  <div class="scroll-viewport">
+    <div class="scroll-track" id="scroll-track">
+      <div class="loading">Loading current box office…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CACHE_KEY = 'dakboard_nowplaying_v2';
+const CACHE_TS_KEY = 'dakboard_nowplaying_ts_v2';
+const ONE_DAY = 86400000;
+
+function fmt(n) {
+  if (!n) return '—';
+  if (n >= 1e9) return '$' + (n/1e9).toFixed(2) + 'B';
+  if (n >= 1e6) return '$' + Math.round(n/1e6) + 'M';
+  return '$' + n.toLocaleString();
+}
+
+function renderMovies(movies) {
+  const track = document.getElementById('scroll-track');
+  if (!movies || !movies.length) { track.innerHTML = '<div class="error">No data available.</div>'; return; }
+  const maxGross = Math.max(...movies.map(m => m.weekend_gross || 0));
+  const rows = movies.map((m, i) => `
+    <div class="movie-row">
+      <span class="rank ${i < 3 ? 'top3' : ''}">${i+1}</span>
+      <div class="movie-info">
+        <div class="movie-title">${m.title}${m.is_new ? '<span class="badge badge-new">NEW</span>' : ''}</div>
+        <div class="movie-meta">Weekend: ${fmt(m.weekend_gross)}${m.cumulative_gross ? ' · Total: ' + fmt(m.cumulative_gross) : ''}${m.weeks_in_release ? ' · Wk ' + m.weeks_in_release : ''}</div>
+      </div>
+      <div class="bar-wrap"><div class="bar" style="width:${maxGross ? Math.round(((m.weekend_gross||0)/maxGross)*100) : 0}%"></div></div>
+      <div class="movie-gross">${fmt(m.weekend_gross)}</div>
+    </div>
+  `).join('');
+  track.innerHTML = rows + rows;
+  startScroll(movies.length);
+}
+
+let animFrame;
+function startScroll(count) {
+  if (animFrame) cancelAnimationFrame(animFrame);
+  const track = document.getElementById('scroll-track');
+  const ROW_H = 62;
+  const totalH = ROW_H * count;
+  let pos = 0, last = null;
+  const SPEED = 0.4;
+  function step(ts) {
+    if (last !== null) pos += (ts - last) * SPEED / 1000 * 60;
+    last = ts;
+    if (pos >= totalH) pos -= totalH;
+    track.style.transform = `translateY(-${pos}px)`;
+    animFrame = requestAnimationFrame(step);
+  }
+  animFrame = requestAnimationFrame(step);
+}
+
+async function fetchMovies() {
+  const track = document.getElementById('scroll-track');
+  const today = new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: [{
+          role: 'user',
+          content: `Search for the current US domestic weekend box office results as of ${today}. Return ONLY a raw JSON array (no markdown, no explanation) of the top 10 films with these fields: {"title":"...","weekend_gross":NUMBER,"cumulative_gross":NUMBER,"weeks_in_release":NUMBER,"is_new":BOOLEAN}. All gross figures in dollars as integers. Sort by weekend_gross descending.`
+        }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content.map(b => b.text || '').join('');
+    const clean = text.replace(/```json|```/g,'').trim();
+    const movies = JSON.parse(clean);
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(movies));
+      localStorage.setItem(CACHE_TS_KEY, Date.now().toString());
+    } catch(e) {}
+    return movies;
+  } catch(e) {
+    track.innerHTML = '<div class="error">Could not load data. Will retry next refresh.</div>';
+    return null;
+  }
+}
+
+function setUpdatedTime() {
+  document.getElementById('updated-time').textContent =
+    'Updated ' + new Date().toLocaleDateString('en-US', {month:'short', day:'numeric'});
+}
+
+async function init() {
+  let movies = null, cached = null, ts = 0;
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    ts = parseInt(localStorage.getItem(CACHE_TS_KEY) || '0');
+    if (raw) cached = JSON.parse(raw);
+  } catch(e) {}
+
+  if (cached && (Date.now() - ts) < ONE_DAY) {
+    movies = cached;
+  } else {
+    movies = await fetchMovies();
+    if (!movies && cached) movies = cached;
+  }
+  setUpdatedTime();
+  if (movies) renderMovies(movies);
+
+  setInterval(async () => {
+    const fresh = await fetchMovies();
+    if (fresh) { setUpdatedTime(); renderMovies(fresh); }
+  }, ONE_DAY);
+}
+
+init();
+</script>
+
+</body>
+</html>
