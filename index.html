@@ -24,7 +24,7 @@
     margin-bottom: 8px;
   }
   .header-title {
-    font-size: 20px;
+    font-size: 13px;
     font-weight: 500;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -43,12 +43,12 @@
     flex-shrink: 0;
     min-height: 62px;
   }
-  .rank { font-size: 20px; font-weight: 500; color: rgba(255,255,255,0.28); width: 20px; text-align: right; flex-shrink: 0; }
+  .rank { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.28); width: 20px; text-align: right; flex-shrink: 0; }
   .rank.top3 { color: #f5c518; }
   .movie-info { flex: 1; min-width: 0; }
-  .movie-title { font-size: 18px; font-weight: 500; color: rgba(255,255,255,0.92); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
-  .movie-meta { font-size: 16px; color: rgba(255,255,255,0.38); margin-top: 2px; }
-  .movie-gross { font-size: 18px; font-weight: 500; color: rgba(255,255,255,0.8); text-align: right; flex-shrink: 0; min-width: 80px; }
+  .movie-title { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.92); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
+  .movie-meta { font-size: 11px; color: rgba(255,255,255,0.38); margin-top: 2px; }
+  .movie-gross { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.8); text-align: right; flex-shrink: 0; min-width: 80px; }
   .bar-wrap { width: 60px; height: 3px; background: rgba(255,255,255,0.07); border-radius: 2px; flex-shrink: 0; }
   .bar { height: 3px; border-radius: 2px; background: #f5c518; }
   .badge { font-size: 10px; font-weight: 500; padding: 2px 6px; border-radius: 3px; margin-left: 6px; vertical-align: middle; flex-shrink: 0; }
@@ -73,15 +73,35 @@
 </div>
 
 <script>
-const CACHE_KEY = 'dakboard_nowplaying_v2';
-const CACHE_TS_KEY = 'dakboard_nowplaying_ts_v2';
-const ONE_DAY = 86400000;
+// ── Weekend box office data (June 5-7, 2026) ──────────────────────────────
+// Update weekly from boxofficemojo.com or the-numbers.com
+const BOX_OFFICE = {
+  weekend: 'Weekend of June 5-7, 2026',
+  movies: [
+    { title: 'Scary Movie 6',                    weekend_gross: 55000000,  cumulative_gross: 55000000,   weeks_in_release: 1, is_new: true  },
+    { title: 'Masters of the Universe',          weekend_gross: 29300000,  cumulative_gross: 29300000,   weeks_in_release: 1, is_new: true  },
+    { title: 'Backrooms',                        weekend_gross: 25900000,  cumulative_gross: 135000000,  weeks_in_release: 2, is_new: false },
+    { title: 'Obsession',                        weekend_gross: 25600000,  cumulative_gross: 152100000,  weeks_in_release: 3, is_new: false },
+    { title: 'The Amazing Digital Circus: The Last Act', weekend_gross: 12300000, cumulative_gross: 20700000, weeks_in_release: 1, is_new: true  },
+    { title: 'The Mandalorian & Grogu',          weekend_gross: 9800000,   cumulative_gross: 298000000,  weeks_in_release: 4, is_new: false },
+    { title: 'Michael',                          weekend_gross: 7200000,   cumulative_gross: 185000000,  weeks_in_release: 5, is_new: false },
+    { title: 'The Breadwinner',                  weekend_gross: 5100000,   cumulative_gross: 18400000,   weeks_in_release: 2, is_new: false },
+    { title: 'Pressure',                         weekend_gross: 3800000,   cumulative_gross: 11200000,   weeks_in_release: 2, is_new: false },
+    { title: 'The Devil Wears Prada 2',          weekend_gross: 2900000,   cumulative_gross: 210000000,  weeks_in_release: 6, is_new: false },
+  ]
+};
 
 function fmt(n) {
   if (!n) return '—';
   if (n >= 1e9) return '$' + (n/1e9).toFixed(2) + 'B';
   if (n >= 1e6) return '$' + Math.round(n/1e6) + 'M';
   return '$' + n.toLocaleString();
+}
+
+const SWATCHES = ['#1a1a2e','#16213e','#0f3460','#533483','#2d6a4f','#1b4332','#6b2d3e','#3d405b','#2c3e50','#1a3a4a'];
+function getSwatch(i) { return SWATCHES[i % SWATCHES.length]; }
+function getInitials(title) {
+  return title.split(' ').slice(0,2).map(w => w[0] || '').join('').toUpperCase() || '♪';
 }
 
 function renderMovies(movies) {
@@ -91,6 +111,7 @@ function renderMovies(movies) {
   const rows = movies.map((m, i) => `
     <div class="movie-row">
       <span class="rank ${i < 3 ? 'top3' : ''}">${i+1}</span>
+      <div class="color-swatch" style="background:${getSwatch(i)}">${getInitials(m.title)}</div>
       <div class="movie-info">
         <div class="movie-title">${m.title}${m.is_new ? '<span class="badge badge-new">NEW</span>' : ''}</div>
         <div class="movie-meta">Weekend: ${fmt(m.weekend_gross)}${m.cumulative_gross ? ' · Total: ' + fmt(m.cumulative_gross) : ''}${m.weeks_in_release ? ' · Wk ' + m.weeks_in_release : ''}</div>
@@ -121,64 +142,9 @@ function startScroll(count) {
   animFrame = requestAnimationFrame(step);
 }
 
-async function fetchMovies() {
-  const track = document.getElementById('scroll-track');
-  const today = new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-        messages: [{
-          role: 'user',
-          content: `Search for the current US domestic weekend box office results as of ${today}. Return ONLY a raw JSON array (no markdown, no explanation) of the top 10 films with these fields: {"title":"...","weekend_gross":NUMBER,"cumulative_gross":NUMBER,"weeks_in_release":NUMBER,"is_new":BOOLEAN}. All gross figures in dollars as integers. Sort by weekend_gross descending.`
-        }]
-      })
-    });
-    const data = await res.json();
-    const text = data.content.map(b => b.text || '').join('');
-    const clean = text.replace(/```json|```/g,'').trim();
-    const movies = JSON.parse(clean);
-    try {
-      localStorage.setItem(CACHE_KEY, JSON.stringify(movies));
-      localStorage.setItem(CACHE_TS_KEY, Date.now().toString());
-    } catch(e) {}
-    return movies;
-  } catch(e) {
-    track.innerHTML = '<div class="error">Could not load data. Will retry next refresh.</div>';
-    return null;
-  }
-}
-
-function setUpdatedTime() {
-  document.getElementById('updated-time').textContent =
-    'Updated ' + new Date().toLocaleDateString('en-US', {month:'short', day:'numeric'});
-}
-
-async function init() {
-  let movies = null, cached = null, ts = 0;
-  try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    ts = parseInt(localStorage.getItem(CACHE_TS_KEY) || '0');
-    if (raw) cached = JSON.parse(raw);
-  } catch(e) {}
-
-  if (cached && (Date.now() - ts) < ONE_DAY) {
-    movies = cached;
-  } else {
-    movies = await fetchMovies();
-    if (!movies && cached) movies = cached;
-  }
-  setUpdatedTime();
-  if (movies) renderMovies(movies);
-
-  setInterval(async () => {
-    const fresh = await fetchMovies();
-    if (fresh) { setUpdatedTime(); renderMovies(fresh); }
-  }, ONE_DAY);
+function init() {
+  document.getElementById('updated-time').textContent = BOX_OFFICE.weekend;
+  renderMovies(BOX_OFFICE.movies);
 }
 
 init();
