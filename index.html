@@ -14,26 +14,28 @@
     overflow: hidden;
     position: relative;
     height: 520px;
+    color: white;
   }
   .header {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 0 0 14px 0;
+    padding: 0 0 10px 0;
     border-bottom: 0.5px solid rgba(255,255,255,0.18);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
+  .header-dot { width: 8px; height: 8px; border-radius: 50%; background: #f5c518; flex-shrink: 0; }
   .header-title {
-    font-size: 13px;
+    font-size: 20px;
     font-weight: 500;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: rgba(255,255,255,0.55);
+    flex: 1;
   }
-  .header-dot { width: 6px; height: 6px; border-radius: 50%; background: #f5c518; flex-shrink: 0; }
-  .last-updated { margin-left: auto; font-size: 11px; color: rgba(255,255,255,0.35); }
-  .scroll-viewport { overflow: hidden; height: 460px; position: relative; }
-  .scroll-track { display: flex; flex-direction: column; gap: 0; }
+  .last-updated { font-size: 16px; color: rgba(255,255,255,0.35); }
+  .scroll-viewport { overflow: hidden; height: 468px; position: relative; }
+  .scroll-track { display: flex; flex-direction: column; }
   .movie-row {
     display: flex;
     align-items: center;
@@ -41,114 +43,172 @@
     border-bottom: 0.5px solid rgba(255,255,255,0.08);
     gap: 12px;
     flex-shrink: 0;
-    min-height: 62px;
+    min-height: 78px;
   }
-  .rank { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.28); width: 20px; text-align: right; flex-shrink: 0; }
+  .rank {
+    font-size: 28px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.28);
+    width: 36px;
+    text-align: right;
+    flex-shrink: 0;
+  }
   .rank.top3 { color: #f5c518; }
+  .poster {
+    width: 46px;
+    height: 68px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.08);
+  }
   .movie-info { flex: 1; min-width: 0; }
-  .movie-title { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.92); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
-  .movie-meta { font-size: 11px; color: rgba(255,255,255,0.38); margin-top: 2px; }
-  .movie-gross { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.8); text-align: right; flex-shrink: 0; min-width: 80px; }
-  .bar-wrap { width: 60px; height: 3px; background: rgba(255,255,255,0.07); border-radius: 2px; flex-shrink: 0; }
-  .bar { height: 3px; border-radius: 2px; background: #f5c518; }
-  .badge { font-size: 10px; font-weight: 500; padding: 2px 6px; border-radius: 3px; margin-left: 6px; vertical-align: middle; flex-shrink: 0; }
-  .badge-new { background: rgba(245,197,24,0.18); color: #f5c518; }
-  .loading { color: rgba(255,255,255,0.4); font-size: 13px; text-align: center; padding: 2rem 0; }
-  .error { color: rgba(255,120,100,0.75); font-size: 12px; text-align: center; padding: 2rem 0; }
+  .movie-title {
+    font-size: 28px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.92);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+  }
+  .movie-meta {
+    font-size: 20px;
+    color: rgba(255,255,255,0.38);
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .badge {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-left: 8px;
+    vertical-align: middle;
+    background: rgba(245,197,24,0.18);
+    color: #f5c518;
+  }
+  .loading { color: rgba(255,255,255,0.4); font-size: 20px; text-align: center; padding: 2rem 0; }
+  .error { color: rgba(255,120,100,0.75); font-size: 18px; text-align: center; padding: 2rem 0; line-height: 1.6; }
 </style>
 </head>
 <body>
-
 <div id="widget">
   <div class="header">
     <div class="header-dot"></div>
-    <span class="header-title">Now in theaters</span>
+    <span class="header-title">Now in Theaters</span>
     <span class="last-updated" id="updated-time"></span>
   </div>
   <div class="scroll-viewport">
     <div class="scroll-track" id="scroll-track">
-      <div class="loading">Loading current box office…</div>
+      <div class="loading">Loading movies…</div>
     </div>
   </div>
 </div>
 
 <script>
-// ── Weekend box office data (June 5-7, 2026) ──────────────────────────────
-// Update weekly from boxofficemojo.com or the-numbers.com
-const BOX_OFFICE = {
-  weekend: 'Weekend of June 5-7, 2026',
-  movies: [
-    { title: 'Scary Movie 6',                    weekend_gross: 55000000,  cumulative_gross: 55000000,   weeks_in_release: 1, is_new: true  },
-    { title: 'Masters of the Universe',          weekend_gross: 29300000,  cumulative_gross: 29300000,   weeks_in_release: 1, is_new: true  },
-    { title: 'Backrooms',                        weekend_gross: 25900000,  cumulative_gross: 135000000,  weeks_in_release: 2, is_new: false },
-    { title: 'Obsession',                        weekend_gross: 25600000,  cumulative_gross: 152100000,  weeks_in_release: 3, is_new: false },
-    { title: 'The Amazing Digital Circus: The Last Act', weekend_gross: 12300000, cumulative_gross: 20700000, weeks_in_release: 1, is_new: true  },
-    { title: 'The Mandalorian & Grogu',          weekend_gross: 9800000,   cumulative_gross: 298000000,  weeks_in_release: 4, is_new: false },
-    { title: 'Michael',                          weekend_gross: 7200000,   cumulative_gross: 185000000,  weeks_in_release: 5, is_new: false },
-    { title: 'The Breadwinner',                  weekend_gross: 5100000,   cumulative_gross: 18400000,   weeks_in_release: 2, is_new: false },
-    { title: 'Pressure',                         weekend_gross: 3800000,   cumulative_gross: 11200000,   weeks_in_release: 2, is_new: false },
-    { title: 'The Devil Wears Prada 2',          weekend_gross: 2900000,   cumulative_gross: 210000000,  weeks_in_release: 6, is_new: false },
-  ]
-};
+// Uses iTunes Movie Charts RSS feed — free, no API key, CORS-enabled
+// Same approach as the working Billboard music widget
+const CACHE_KEY  = 'itunes_movies_top_v1';
+const CACHE_TS   = 'itunes_movies_top_ts_v1';
+const ONE_DAY    = 86400000;
+const ROW_H      = 78;
+const SCROLL_SPEED = 0.15; // px per frame, same as billboard
 
-function fmt(n) {
-  if (!n) return '—';
-  if (n >= 1e9) return '$' + (n/1e9).toFixed(2) + 'B';
-  if (n >= 1e6) return '$' + Math.round(n/1e6) + 'M';
-  return '$' + n.toLocaleString();
+function formatDate(d) {
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
-const SWATCHES = ['#1a1a2e','#16213e','#0f3460','#533483','#2d6a4f','#1b4332','#6b2d3e','#3d405b','#2c3e50','#1a3a4a'];
-function getSwatch(i) { return SWATCHES[i % SWATCHES.length]; }
-function getInitials(title) {
-  return title.split(' ').slice(0,2).map(w => w[0] || '').join('').toUpperCase() || '♪';
-}
-
-function renderMovies(movies) {
-  const track = document.getElementById('scroll-track');
-  if (!movies || !movies.length) { track.innerHTML = '<div class="error">No data available.</div>'; return; }
-  const maxGross = Math.max(...movies.map(m => m.weekend_gross || 0));
-  const rows = movies.map((m, i) => `
-    <div class="movie-row">
-      <span class="rank ${i < 3 ? 'top3' : ''}">${i+1}</span>
-      <div class="color-swatch" style="background:${getSwatch(i)}">${getInitials(m.title)}</div>
+function buildRows(movies) {
+  return movies.map((m, i) => {
+    const rankClass = i < 3 ? 'rank top3' : 'rank';
+    const posterEl = m.art
+      ? `<img class="poster" src="${m.art}" alt="" loading="lazy">`
+      : `<div class="poster"></div>`;
+    const genreStr = m.genre ? ` · ${m.genre}` : '';
+    const priceStr = m.price ? ` · ${m.price}` : '';
+    return `<div class="movie-row">
+      <div class="${rankClass}">${i + 1}</div>
+      ${posterEl}
       <div class="movie-info">
-        <div class="movie-title">${m.title}${m.is_new ? '<span class="badge badge-new">NEW</span>' : ''}</div>
-        <div class="movie-meta">Weekend: ${fmt(m.weekend_gross)}${m.cumulative_gross ? ' · Total: ' + fmt(m.cumulative_gross) : ''}${m.weeks_in_release ? ' · Wk ' + m.weeks_in_release : ''}</div>
+        <div class="movie-title">${m.title}</div>
+        <div class="movie-meta">${m.artist}${genreStr}${priceStr}</div>
       </div>
-      <div class="bar-wrap"><div class="bar" style="width:${maxGross ? Math.round(((m.weekend_gross||0)/maxGross)*100) : 0}%"></div></div>
-      <div class="movie-gross">${fmt(m.weekend_gross)}</div>
-    </div>
-  `).join('');
-  track.innerHTML = rows + rows;
-  startScroll(movies.length);
+    </div>`;
+  }).join('');
 }
 
 let animFrame;
 function startScroll(count) {
   if (animFrame) cancelAnimationFrame(animFrame);
   const track = document.getElementById('scroll-track');
-  const ROW_H = 62;
   const totalH = ROW_H * count;
-  let pos = 0, last = null;
-  const SPEED = 0.4;
-  function step(ts) {
-    if (last !== null) pos += (ts - last) * SPEED / 1000 * 60;
-    last = ts;
-    if (pos >= totalH) pos -= totalH;
-    track.style.transform = `translateY(-${pos}px)`;
+  let y = 0;
+  function step() {
+    y += SCROLL_SPEED;
+    if (y >= totalH) y -= totalH;
+    track.style.transform = `translateY(-${y}px)`;
     animFrame = requestAnimationFrame(step);
   }
   animFrame = requestAnimationFrame(step);
 }
 
-function init() {
-  document.getElementById('updated-time').textContent = BOX_OFFICE.weekend;
-  renderMovies(BOX_OFFICE.movies);
+function renderMovies(movies) {
+  const track = document.getElementById('scroll-track');
+  if (!movies || !movies.length) {
+    track.innerHTML = '<div class="error">No data available.</div>';
+    return;
+  }
+  const html = buildRows(movies);
+  track.innerHTML = html + html; // duplicate for seamless loop
+  startScroll(movies.length);
+}
+
+async function fetchMovies() {
+  const now = Date.now();
+  try {
+    const cached = localStorage.getItem(CACHE_KEY);
+    const ts = parseInt(localStorage.getItem(CACHE_TS) || '0');
+    if (cached && (now - ts) < ONE_DAY) return JSON.parse(cached);
+  } catch(e) {}
+
+  // iTunes Top Movies feed — CORS-enabled, free, no key
+  const url = 'https://itunes.apple.com/us/rss/topmovies/limit=25/json';
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`iTunes feed returned ${res.status}`);
+  const json = await res.json();
+
+  const entries = json.feed.entry || [];
+  const movies = entries.map(entry => ({
+    title:  entry['im:name'].label,
+    artist: entry['im:artist']?.label || '',
+    genre:  entry.category?.attributes?.label || '',
+    price:  entry['im:price']?.label || '',
+    art:    entry['im:image']?.[2]?.label || entry['im:image']?.[0]?.label || null,
+  }));
+
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(movies));
+    localStorage.setItem(CACHE_TS, String(now));
+  } catch(e) {}
+
+  return movies;
+}
+
+async function init() {
+  try {
+    const movies = await fetchMovies();
+    document.getElementById('updated-time').textContent = formatDate(new Date());
+    renderMovies(movies);
+  } catch(e) {
+    document.getElementById('scroll-track').innerHTML =
+      `<div class="error">Unable to load movies.<br>${e.message}</div>`;
+  }
 }
 
 init();
 </script>
-
 </body>
 </html>
