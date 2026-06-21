@@ -2,213 +2,272 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Box Office Widget</title>
+<title>Weekend Box Office</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: transparent; }
-  #widget {
-    width: 100%;
-    background: transparent;
-    font-family: sans-serif;
-    overflow: hidden;
-    position: relative;
-    height: 520px;
-    color: white;
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --gold:#E8B94A; --gold-dim:#9C7E3C;
+    --bg:transparent;
+    --card:rgba(42,15,18,0.55);
+    --card-edge:rgba(232,185,74,0.22);
+    --cream:#F2E9DD; --cream-dim:#B8A89C;
+    --rose:#8C7A78;
+    --green:#5FBF6F; --red:#E2685A;
+    --rule:rgba(232,185,74,0.18);
   }
-  .header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0 0 10px 0;
-    border-bottom: 0.5px solid rgba(255,255,255,0.18);
-    margin-bottom: 6px;
+  html, body {
+    width:100%; height:100%; overflow:hidden;
+    background:transparent;
+    font-family:'Inter',sans-serif; color:var(--cream);
   }
-  .header-dot { width: 8px; height: 8px; border-radius: 50%; background: #f5c518; flex-shrink: 0; }
-  .header-title {
-    font-size: 20px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.55);
-    flex: 1;
+
+  .stage {
+    width:100%; height:100%;
+    display:flex; flex-direction:column;
+    background:transparent;
   }
-  .last-updated { font-size: 16px; color: rgba(255,255,255,0.35); }
-  .scroll-viewport { overflow: hidden; height: 468px; position: relative; }
-  .scroll-track { display: flex; flex-direction: column; }
-  .movie-row {
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 0.5px solid rgba(255,255,255,0.08);
-    gap: 12px;
-    flex-shrink: 0;
-    min-height: 78px;
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    display:flex; align-items:baseline; justify-content:space-between;
+    padding:3% 6% 2%;
+    flex-shrink:0;
   }
-  .rank {
-    font-size: 28px;
-    font-weight: 500;
-    color: rgba(255,255,255,0.28);
-    width: 36px;
-    text-align: right;
-    flex-shrink: 0;
+  .masthead-title {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(22px, 4.2vw, 40px);
+    letter-spacing:0.04em;
+    color:var(--gold);
+    line-height:1;
   }
-  .rank.top3 { color: #f5c518; }
-  .poster {
-    width: 46px;
-    height: 68px;
-    border-radius: 4px;
-    object-fit: cover;
-    flex-shrink: 0;
-    background: rgba(255,255,255,0.08);
+  .masthead-sub {
+    font-size:clamp(11px, 1.5vw, 15px);
+    color:var(--rose);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin-top:0.4em;
   }
-  .movie-info { flex: 1; min-width: 0; }
-  .movie-title {
-    font-size: 28px;
-    font-weight: 500;
-    color: rgba(255,255,255,0.92);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.2;
+  .masthead-weekend {
+    font-size:clamp(11px, 1.6vw, 16px);
+    color:var(--cream-dim);
+    text-align:right;
+    white-space:nowrap;
   }
-  .movie-meta {
-    font-size: 20px;
-    color: rgba(255,255,255,0.38);
-    margin-top: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+
+  .status-line {
+    padding:0 6% 2%;
+    font-size:clamp(9px, 1.1vw, 12px);
+    color:var(--gold-dim);
+    letter-spacing:0.04em;
+    flex-shrink:0;
   }
-  .badge {
-    font-size: 14px;
-    font-weight: 500;
-    padding: 2px 7px;
-    border-radius: 3px;
-    margin-left: 8px;
-    vertical-align: middle;
-    background: rgba(245,197,24,0.18);
-    color: #f5c518;
+  .status-line.error { color:var(--red); }
+
+  /* ── SCROLL AREA ── */
+  .scroll-wrapper { flex:1; overflow:hidden; position:relative; }
+  .scroll-track { display:flex; flex-direction:column; }
+
+  /* ── FILM ROW ── */
+  .film-row {
+    display:flex; align-items:center; gap:4%;
+    padding:3.2% 6%;
+    position:relative;
   }
-  .loading { color: rgba(255,255,255,0.4); font-size: 20px; text-align: center; padding: 2rem 0; }
-  .error { color: rgba(255,120,100,0.75); font-size: 18px; text-align: center; padding: 2rem 0; line-height: 1.6; }
+  .film-row::after {
+    content:"";
+    position:absolute; left:6%; right:6%; bottom:0;
+    height:1px;
+    background-image: linear-gradient(90deg, var(--rule) 50%, transparent 50%);
+    background-size: 14px 1px;
+  }
+
+  .rank-block {
+    flex-shrink:0;
+    width:14%;
+    display:flex; flex-direction:column; align-items:center;
+    font-family:'Bebas Neue',sans-serif;
+  }
+  .rank-num {
+    font-size:clamp(28px, 6.5vw, 58px);
+    color:var(--gold);
+    line-height:0.9;
+  }
+  .rank-new {
+    margin-top:0.3em;
+    font-family:'Inter',sans-serif;
+    font-size:clamp(8px, 1vw, 11px);
+    font-weight:700;
+    letter-spacing:0.1em;
+    color:#16080A;
+    background:var(--gold);
+    border-radius:3px;
+    padding:0.15em 0.6em;
+    text-transform:uppercase;
+  }
+
+  .film-info {
+    flex:1; min-width:0;
+    display:flex; flex-direction:column; gap:0.3em;
+  }
+  .film-title {
+    font-size:clamp(15px, 2.6vw, 25px);
+    font-weight:700;
+    color:var(--cream);
+    line-height:1.15;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .film-meta {
+    font-size:clamp(10px, 1.4vw, 14px);
+    color:var(--rose);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .film-meta .distributor { color:var(--cream-dim); }
+
+  .film-figures {
+    flex-shrink:0;
+    text-align:right;
+    display:flex; flex-direction:column; gap:0.25em;
+    font-variant-numeric: tabular-nums;
+  }
+  .figure-gross {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(17px, 3vw, 28px);
+    color:var(--gold);
+    letter-spacing:0.02em;
+    line-height:1;
+  }
+  .figure-change {
+    font-size:clamp(10px, 1.4vw, 14px);
+    font-weight:600;
+  }
+  .figure-change.pos { color:var(--green); }
+  .figure-change.neg { color:var(--red); }
+  .figure-change.flat { color:var(--cream-dim); }
+  .figure-total {
+    font-size:clamp(9px, 1.2vw, 12px);
+    color:var(--rose);
+  }
 </style>
 </head>
 <body>
-<div id="widget">
-  <div class="header">
-    <div class="header-dot"></div>
-    <span class="header-title">Top iTunes Movies</span>
-    <span class="last-updated" id="updated-time"></span>
-  </div>
-  <div class="scroll-viewport">
-    <div class="scroll-track" id="scroll-track">
-      <div class="loading">Loading movies…</div>
+
+<div class="stage">
+  <div class="masthead">
+    <div>
+      <div class="masthead-title">BOX OFFICE</div>
+      <div class="masthead-sub">Domestic Weekend Chart</div>
     </div>
+    <div class="masthead-weekend" id="weekendLabel">—</div>
+  </div>
+  <div class="status-line" id="statusLine">Loading…</div>
+
+  <div class="scroll-wrapper">
+    <div class="scroll-track" id="scrollTrack"></div>
   </div>
 </div>
 
 <script>
-// Uses iTunes Movie Charts RSS feed — free, no API key, CORS-enabled
-// Same approach as the working Billboard music widget
-const CACHE_KEY  = 'itunes_movies_top_v1';
-const CACHE_TS   = 'itunes_movies_top_ts_v1';
-const ONE_DAY    = 86400000;
-const ROW_H      = 78;
-const SCROLL_SPEED = 0.22; // px per frame, same as billboard
+/* ── CONFIG ──
+   Replace OWNER/REPO with your GitHub username and repo name, pointing at
+   the raw JSON file kept up to date by the GitHub Action
+   (see .github/workflows/update-boxoffice.yml + scripts/fetch_boxoffice.py). */
+const DATA_URL = "https://raw.githubusercontent.com/nancyamedeo-rgb/box-office/main/data/boxoffice.json";
 
-function formatDate(d) {
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+const SCROLL_SPEED = 0.4; // px per frame, matches the World Cup widget's pace
+
+function money(n) {
+  if (n === null || n === undefined) return "—";
+  if (n >= 1e6) return "$" + (n / 1e6).toFixed(1).replace(/\.0$/, "") + "M";
+  if (n >= 1e3) return "$" + Math.round(n / 1e3) + "K";
+  return "$" + n;
 }
 
-function buildRows(movies) {
-  return movies.map((m, i) => {
-    const rankClass = i < 3 ? 'rank top3' : 'rank';
-    const posterEl = m.art
-      ? `<img class="poster" src="${m.art}" alt="" loading="lazy">`
-      : `<div class="poster"></div>`;
-    const genreStr = m.genre ? ` · ${m.genre}` : '';
-    const priceStr = m.price ? ` · ${m.price}` : '';
-    return `<div class="movie-row">
-      <div class="${rankClass}">${i + 1}</div>
-      ${posterEl}
-      <div class="movie-info">
-        <div class="movie-title">${m.title}</div>
-        <div class="movie-meta">${m.artist}${genreStr}${priceStr}</div>
-      </div>
-    </div>`;
-  }).join('');
+function changeClass(pct) {
+  if (!pct) return "flat";
+  if (pct.startsWith("+")) return "pos";
+  if (pct.startsWith("-")) return "neg";
+  return "flat";
 }
 
-let animFrame;
-function startScroll(count) {
-  if (animFrame) cancelAnimationFrame(animFrame);
-  const track = document.getElementById('scroll-track');
-  const totalH = ROW_H * count;
-  let y = 0;
+function buildFilmRow(film) {
+  const changeCls = changeClass(film.changePct);
+  const changeText = film.changePct ? film.changePct : "NEW";
+  const metaParts = [];
+  if (film.distributor) metaParts.push(`<span class="distributor">${film.distributor}</span>`);
+  if (film.theaters) metaParts.push(film.theaters.toLocaleString() + " theaters");
+  if (film.weeksInRelease) metaParts.push("Wk " + film.weeksInRelease);
+
+  return `<div class="film-row">
+    <div class="rank-block">
+      <div class="rank-num">${film.rank}</div>
+      ${film.isNew ? '<div class="rank-new">New</div>' : ''}
+    </div>
+    <div class="film-info">
+      <div class="film-title">${film.title}</div>
+      <div class="film-meta">${metaParts.join(" · ")}</div>
+    </div>
+    <div class="film-figures">
+      <div class="figure-gross">${money(film.weekendGross)}</div>
+      <div class="figure-change ${changeCls}">${changeText}</div>
+      ${film.totalGross ? `<div class="figure-total">Total ${money(film.totalGross)}</div>` : ''}
+    </div>
+  </div>`;
+}
+
+let scrollPos = 0, scrollRAF = null;
+function startScroll() {
+  if (scrollRAF) cancelAnimationFrame(scrollRAF);
+  const track = document.getElementById("scrollTrack");
+  const half = track.scrollHeight / 2;
+  if (half <= 0) return;
   function step() {
-    y += SCROLL_SPEED;
-    if (y >= totalH) y -= totalH;
-    track.style.transform = `translateY(-${y}px)`;
-    animFrame = requestAnimationFrame(step);
+    scrollPos += SCROLL_SPEED;
+    if (scrollPos >= half) scrollPos = 0;
+    track.style.transform = "translateY(-" + scrollPos + "px)";
+    scrollRAF = requestAnimationFrame(step);
   }
-  animFrame = requestAnimationFrame(step);
+  scrollRAF = requestAnimationFrame(step);
 }
 
-function renderMovies(movies) {
-  const track = document.getElementById('scroll-track');
-  if (!movies || !movies.length) {
-    track.innerHTML = '<div class="error">No data available.</div>';
-    return;
-  }
-  const html = buildRows(movies);
-  track.innerHTML = html + html; // duplicate for seamless loop
-  startScroll(movies.length);
+function setStatus(msg, isError) {
+  const el = document.getElementById("statusLine");
+  el.textContent = msg;
+  el.className = "status-line" + (isError ? " error" : "");
 }
 
-async function fetchMovies() {
-  const now = Date.now();
+async function fetchBoxOffice() {
+  setStatus("Fetching latest standings…", false);
   try {
-    const cached = localStorage.getItem(CACHE_KEY);
-    const ts = parseInt(localStorage.getItem(CACHE_TS) || '0');
-    if (cached && (now - ts) < ONE_DAY) return JSON.parse(cached);
-  } catch(e) {}
+    const res = await fetch(DATA_URL + "?t=" + Date.now());
+    if (!res.ok) throw new Error("Fetch failed: HTTP " + res.status);
+    const data = await res.json();
 
-  // iTunes Top Movies feed — CORS-enabled, free, no key
-  const url = 'https://itunes.apple.com/us/rss/topmovies/limit=25/json';
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`iTunes feed returned ${res.status}`);
-  const json = await res.json();
+    if (data.status === "error" || !data.films || data.films.length === 0) {
+      throw new Error(data.lastError || "No box office data available yet");
+    }
 
-  const entries = json.feed.entry || [];
-  const movies = entries.map(entry => ({
-    title:  entry['im:name'].label,
-    artist: entry['im:artist']?.label || '',
-    genre:  entry.category?.attributes?.label || '',
-    price:  entry['im:price']?.label || '',
-    art:    entry['im:image']?.[2]?.label || entry['im:image']?.[0]?.label || null,
-  }));
+    document.getElementById("weekendLabel").textContent = data.weekendLabel || "";
 
-  try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify(movies));
-    localStorage.setItem(CACHE_TS, String(now));
-  } catch(e) {}
+    const track = document.getElementById("scrollTrack");
+    const rowsHtml = data.films.map(buildFilmRow).join("");
+    track.innerHTML = rowsHtml + rowsHtml; // duplicate for seamless loop
+    startScroll();
 
-  return movies;
-}
-
-async function init() {
-  try {
-    const movies = await fetchMovies();
-    document.getElementById('updated-time').textContent = formatDate(new Date());
-    renderMovies(movies);
-  } catch(e) {
-    document.getElementById('scroll-track').innerHTML =
-      `<div class="error">Unable to load movies.<br>${e.message}</div>`;
+    const updated = data.updatedAt ? new Date(data.updatedAt) : new Date();
+    const label = data.status === "stale"
+      ? "Showing cached data from " + updated.toLocaleTimeString()
+      : "Updated " + updated.toLocaleTimeString();
+    setStatus(label, data.status === "stale");
+  } catch (e) {
+    console.error("Box office fetch error:", e);
+    setStatus("Update failed — showing last data", true);
   }
 }
 
-init();
+fetchBoxOffice();
+setInterval(fetchBoxOffice, 15 * 60 * 1000);   // poll every 15 min
+setTimeout(() => location.reload(), 6 * 60 * 60 * 1000); // safety-net reload every 6 hrs
 </script>
 </body>
 </html>
