@@ -11,7 +11,8 @@
       "totalGross": 160000000,
       "weeksInRelease": 1,
       "distributor": "Walt Disney Studios Motion Pictures",
-      "isNew": true
+      "isNew": true,
+      "poster": "https://image.tmdb.org/t/p/w185/pxG26JdyuiDvJbSoucknaFiLeZD.jpg"
     },
     {
       "rank": 2,
@@ -22,7 +23,8 @@
       "totalGross": 78283500,
       "weeksInRelease": 2,
       "distributor": "Universal Pictures",
-      "isNew": false
+      "isNew": false,
+      "poster": "https://image.tmdb.org/t/p/w185/3o5YPjDGDTcTDL5ftDA9NwN9dLd.jpg"
     },
     {
       "rank": 3,
@@ -33,7 +35,8 @@
       "totalGross": 215834620,
       "weeksInRelease": 6,
       "distributor": "Focus Features",
-      "isNew": false
+      "isNew": false,
+      "poster": "https://image.tmdb.org/t/p/w185/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg"
     },
     {
       "rank": 4,
@@ -44,7 +47,8 @@
       "totalGross": 175191407,
       "weeksInRelease": 4,
       "distributor": "A24",
-      "isNew": false
+      "isNew": false,
+      "poster": "https://image.tmdb.org/t/p/w185/rhGx6E3qRNMgj3i5su2oukNHwIQ.jpg"
     },
     {
       "rank": 5,
@@ -55,7 +59,8 @@
       "totalGross": 97563273,
       "weeksInRelease": 3,
       "distributor": "Paramount Pictures",
-      "isNew": false
+      "isNew": false,
+      "poster": "https://image.tmdb.org/t/p/w185/fVQFPRuw3yWXojYDJvA5EoFjUOY.jpg"
     },
     {
       "rank": 6,
@@ -66,7 +71,8 @@
       "totalGross": 56914098,
       "weeksInRelease": 3,
       "distributor": "Amazon MGM Studios",
-      "isNew": false
+      "isNew": false,
+      "poster": "https://image.tmdb.org/t/p/w185/3YMd9Ogae4rDKLWuAZFuse9xhc5.jpg"
     },
     {
       "rank": 7,
@@ -77,7 +83,8 @@
       "totalGross": 171764990,
       "weeksInRelease": 5,
       "distributor": "Walt Disney Studios Motion Pictures",
-      "isNew": false
+      "isNew": false,
+      "poster": "https://image.tmdb.org/t/p/w185/5Vi8dSauVwH1HOsiZceDMbRr1Ca.jpg"
     },
     {
       "rank": 8,
@@ -88,7 +95,8 @@
       "totalGross": 2747500,
       "weeksInRelease": 1,
       "distributor": "Neon",
-      "isNew": true
+      "isNew": true,
+      "poster": "https://image.tmdb.org/t/p/w185/cu0XnXLzJGPeI0msCoJKgnEecKz.jpg"
     },
     {
       "rank": 9,
@@ -99,7 +107,8 @@
       "totalGross": 2621675,
       "weeksInRelease": 1,
       "distributor": "A24",
-      "isNew": true
+      "isNew": true,
+      "poster": "https://image.tmdb.org/t/p/w185/4cD7KeABHyzeJmzdA6QKe36fp2d.jpg"
     },
     {
       "rank": 10,
@@ -110,7 +119,8 @@
       "totalGross": 367915197,
       "weeksInRelease": 9,
       "distributor": "Lionsgate",
-      "isNew": false
+      "isNew": false,
+      "poster": "https://image.tmdb.org/t/p/w185/zm0KAbOjlt9eR5y7vDiL2dEOwMl.jpg"
     },
     {
       "rank": 11,
@@ -121,7 +131,8 @@
       "totalGross": 1600000,
       "weeksInRelease": 1,
       "distributor": "Focus Features",
-      "isNew": true
+      "isNew": true,
+      "poster": "https://image.tmdb.org/t/p/w185/lFjtAAK5jCPXdcKIgpVJ54Hm0G0.jpg"
     },
     {
       "rank": 12,
@@ -132,7 +143,8 @@
       "totalGross": 5261465,
       "weeksInRelease": 2,
       "distributor": "Lionsgate",
-      "isNew": false
+      "isNew": false,
+      "poster": "https://image.tmdb.org/t/p/w185/zP19YO60jwEsfKd5Qf1UvA5uJu8.jpg"
     },
     {
       "rank": 13,
@@ -143,7 +155,8 @@
       "totalGross": 19347849,
       "weeksInRelease": 4,
       "distributor": "Sony Pictures Releasing",
-      "isNew": false
+      "isNew": false,
+      "poster": "https://image.tmdb.org/t/p/w185/4apG9Xk6HQvV48JKEjSUeiebju7.jpg"
     },
     {
       "rank": 14,
@@ -154,7 +167,8 @@
       "totalGross": 219390830,
       "weeksInRelease": 8,
       "distributor": "Walt Disney Studios Motion Pictures",
-      "isNew": false
+      "isNew": false,
+      "poster": "https://image.tmdb.org/t/p/w185/xTI42pmsP5EDnvsNJPEDubwWBQO.jpg"
     },
     {
       "rank": 15,
@@ -165,10 +179,12 @@
       "totalGross": 3256717,
       "weeksInRelease": 2,
       "distributor": "N/A",
-      "isNew": false
+      "isNew": false,
+      "poster": "https://image.tmdb.org/t/p/w185/w90dGS6D2lVO4aO5rdQ8QECrUGY.jpg"
     }
   ],
-  "updatedAt": "2026-06-21T20:20:04.312725+00:00",
+  "updatedAt": "2026-06-21T20:52:04.684014+00:00",
   "source": "boxofficemojo.com",
+  "posterSource": "themoviedb.org",
   "status": "ok"
 }
