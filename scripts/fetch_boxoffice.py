@@ -39,6 +39,38 @@ HEADERS = {
 }
 MAX_ROWS = 15  # how many ranked titles to keep
 
+# Poster lookup via TMDb (The Movie Database) — free for non-commercial use,
+# requires only a free API key (no payment). Box Office Mojo's own chart
+# page has no poster images, so this is a second, optional lookup per film.
+# If TMDB_API_KEY isn't set, posters are simply skipped — the rest of the
+# widget still works fine without them.
+TMDB_API_KEY = os.environ.get("TMDB_API_KEY")
+TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/movie"
+TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/w185"  # small size, right for a list thumbnail
+
+
+def fetch_poster_url(title):
+    """Look up a film's poster on TMDb by title. Returns a full image URL,
+    or None if not found / lookup fails / no API key configured. Never
+    raises — a missing poster for one film shouldn't break the whole fetch."""
+    if not TMDB_API_KEY:
+        return None
+    try:
+        resp = requests.get(
+            TMDB_SEARCH_URL,
+            params={"api_key": TMDB_API_KEY, "query": title},
+            timeout=15,
+        )
+        resp.raise_for_status()
+        results = resp.json().get("results", [])
+        if not results:
+            return None
+        poster_path = results[0].get("poster_path")
+        return f"{TMDB_IMAGE_BASE}{poster_path}" if poster_path else None
+    except Exception as e:
+        print(f"  poster lookup failed for '{title}': {e}", file=sys.stderr)
+        return None
+
 
 def money_to_int(text):
     """'$54,336,626' -> 54336626. Returns None if not parseable (e.g. '-')."""
@@ -165,12 +197,22 @@ def main():
         html = get(weekend_url)
         chart_title, films = parse_weekend_chart(html)
 
+        if TMDB_API_KEY:
+            print(f"Looking up posters for {len(films)} films via TMDb...")
+            for film in films:
+                film["poster"] = fetch_poster_url(film["title"])
+        else:
+            print("TMDB_API_KEY not set — skipping poster lookup (widget will show fallback icons).")
+            for film in films:
+                film["poster"] = None
+
         output = {
             "weekendLabel": weekend_label,
             "chartTitle": chart_title,
             "films": films,
             "updatedAt": datetime.now(timezone.utc).isoformat(),
             "source": "boxofficemojo.com",
+            "posterSource": "themoviedb.org" if TMDB_API_KEY else None,
             "status": "ok",
         }
         print(f"Fetched {len(films)} films for: {chart_title} ({weekend_label})")
