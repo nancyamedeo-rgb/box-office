@@ -27,6 +27,8 @@ jobs:
         run: pip install requests beautifulsoup4
 
       - name: Fetch latest box office chart
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
         run: python scripts/fetch_boxoffice.py
 
       - name: Commit and push if changed
