@@ -1,0 +1,174 @@
+{
+  "weekendLabel": "Jun 19-21",
+  "chartTitle": "Domestic 2026 Weekend 25",
+  "films": [
+    {
+      "rank": 1,
+      "title": "Toy Story 5",
+      "weekendGross": 160000000,
+      "changePct": null,
+      "theaters": 4425,
+      "totalGross": 160000000,
+      "weeksInRelease": 1,
+      "distributor": "Walt Disney Studios Motion Pictures",
+      "isNew": true
+    },
+    {
+      "rank": 2,
+      "title": "Disclosure Day",
+      "weekendGross": 17000000,
+      "changePct": "-61.8%",
+      "theaters": 3824,
+      "totalGross": 78283500,
+      "weeksInRelease": 2,
+      "distributor": "Universal Pictures",
+      "isNew": false
+    },
+    {
+      "rank": 3,
+      "title": "Obsession",
+      "weekendGross": 14200000,
+      "changePct": "-25.3%",
+      "theaters": 3053,
+      "totalGross": 215834620,
+      "weeksInRelease": 6,
+      "distributor": "Focus Features",
+      "isNew": false
+    },
+    {
+      "rank": 4,
+      "title": "Backrooms",
+      "weekendGross": 7311311,
+      "changePct": "-36.5%",
+      "theaters": 2851,
+      "totalGross": 175191407,
+      "weeksInRelease": 4,
+      "distributor": "A24",
+      "isNew": false
+    },
+    {
+      "rank": 5,
+      "title": "Scary Movie",
+      "weekendGross": 6700000,
+      "changePct": "-52.8%",
+      "theaters": 2725,
+      "totalGross": 97563273,
+      "weeksInRelease": 3,
+      "distributor": "Paramount Pictures",
+      "isNew": false
+    },
+    {
+      "rank": 6,
+      "title": "Masters of the Universe",
+      "weekendGross": 5599541,
+      "changePct": "-37.3%",
+      "theaters": 2517,
+      "totalGross": 56914098,
+      "weeksInRelease": 3,
+      "distributor": "Amazon MGM Studios",
+      "isNew": false
+    },
+    {
+      "rank": 7,
+      "title": "Star Wars: The Mandalorian and Grogu",
+      "weekendGross": 3900000,
+      "changePct": "-18.8%",
+      "theaters": 2000,
+      "totalGross": 171764990,
+      "weeksInRelease": 5,
+      "distributor": "Walt Disney Studios Motion Pictures",
+      "isNew": false
+    },
+    {
+      "rank": 8,
+      "title": "Leviticus",
+      "weekendGross": 2747500,
+      "changePct": null,
+      "theaters": 1076,
+      "totalGross": 2747500,
+      "weeksInRelease": 1,
+      "distributor": "Neon",
+      "isNew": true
+    },
+    {
+      "rank": 9,
+      "title": "The Death of Robin Hood",
+      "weekendGross": 2621675,
+      "changePct": null,
+      "theaters": 1762,
+      "totalGross": 2621675,
+      "weeksInRelease": 1,
+      "distributor": "A24",
+      "isNew": true
+    },
+    {
+      "rank": 10,
+      "title": "Michael",
+      "weekendGross": 2185000,
+      "changePct": "-48.2%",
+      "theaters": 1434,
+      "totalGross": 367915197,
+      "weeksInRelease": 9,
+      "distributor": "Lionsgate",
+      "isNew": false
+    },
+    {
+      "rank": 11,
+      "title": "Girls Like Girls",
+      "weekendGross": 1600000,
+      "changePct": null,
+      "theaters": 504,
+      "totalGross": 1600000,
+      "weeksInRelease": 1,
+      "distributor": "Focus Features",
+      "isNew": true
+    },
+    {
+      "rank": 12,
+      "title": "The Furious",
+      "weekendGross": 1120000,
+      "changePct": "-60.1%",
+      "theaters": 870,
+      "totalGross": 5261465,
+      "weeksInRelease": 2,
+      "distributor": "Lionsgate",
+      "isNew": false
+    },
+    {
+      "rank": 13,
+      "title": "The Breadwinner",
+      "weekendGross": 900000,
+      "changePct": "-40.8%",
+      "theaters": 802,
+      "totalGross": 19347849,
+      "weeksInRelease": 4,
+      "distributor": "Sony Pictures Releasing",
+      "isNew": false
+    },
+    {
+      "rank": 14,
+      "title": "The Devil Wears Prada 2",
+      "weekendGross": 707000,
+      "changePct": "-47.1%",
+      "theaters": 425,
+      "totalGross": 219390830,
+      "weeksInRelease": 8,
+      "distributor": "Walt Disney Studios Motion Pictures",
+      "isNew": false
+    },
+    {
+      "rank": 15,
+      "title": "Stop! That! Train!",
+      "weekendGross": 487012,
+      "changePct": "-75.9%",
+      "theaters": 664,
+      "totalGross": 3256717,
+      "weeksInRelease": 2,
+      "distributor": "N/A",
+      "isNew": false
+    }
+  ],
+  "updatedAt": "2026-06-21T20:20:04.312725+00:00",
+  "source": "boxofficemojo.com",
+  "status": "ok"
+}
