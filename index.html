@@ -84,12 +84,12 @@
 
   .rank-block {
     flex-shrink:0;
-    width:14%;
+    width:11%;
     display:flex; flex-direction:column; align-items:center;
     font-family:'Bebas Neue',sans-serif;
   }
   .rank-num {
-    font-size:clamp(28px, 6.5vw, 58px);
+    font-size:clamp(26px, 6vw, 52px);
     color:var(--gold);
     line-height:0.9;
   }
@@ -104,6 +104,26 @@
     border-radius:3px;
     padding:0.15em 0.6em;
     text-transform:uppercase;
+  }
+
+  .poster-block {
+    flex-shrink:0;
+    width:11%;
+    aspect-ratio:2/3;
+    border-radius:3px;
+    overflow:hidden;
+    background:rgba(232,185,74,0.08);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .poster-block img {
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .poster-fallback {
+    font-size:clamp(14px, 2.2vw, 20px);
+    color:var(--gold-dim);
+    line-height:1;
   }
 
   .film-info {
@@ -198,11 +218,16 @@ function buildFilmRow(film) {
   if (film.theaters) metaParts.push(film.theaters.toLocaleString() + " theaters");
   if (film.weeksInRelease) metaParts.push("Wk " + film.weeksInRelease);
 
+  const posterHtml = film.poster
+    ? `<img src="${film.poster}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'poster-fallback',textContent:'🎬'}))">`
+    : `<div class="poster-fallback">🎬</div>`;
+
   return `<div class="film-row">
     <div class="rank-block">
       <div class="rank-num">${film.rank}</div>
       ${film.isNew ? '<div class="rank-new">New</div>' : ''}
     </div>
+    <div class="poster-block">${posterHtml}</div>
     <div class="film-info">
       <div class="film-title">${film.title}</div>
       <div class="film-meta">${metaParts.join(" · ")}</div>
