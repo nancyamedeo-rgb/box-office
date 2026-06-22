@@ -12,7 +12,7 @@
       "weeksInRelease": 1,
       "distributor": "Walt Disney Studios Motion Pictures",
       "isNew": true,
-      "poster": "https://image.tmdb.org/t/p/w185/pxG26JdyuiDvJbSoucknaFiLeZD.jpg"
+      "poster": "https://image.tmdb.org/t/p/w185/a6H2U7pjibMia41TwyFVd1PVQw3.jpg"
     },
     {
       "rank": 2,
@@ -120,7 +120,7 @@
       "weeksInRelease": 9,
       "distributor": "Lionsgate",
       "isNew": false,
-      "poster": "https://image.tmdb.org/t/p/w185/zm0KAbOjlt9eR5y7vDiL2dEOwMl.jpg"
+      "poster": "https://image.tmdb.org/t/p/w185/zZtagf8mE4mdUqpWskVn23HaoiG.jpg"
     },
     {
       "rank": 11,
@@ -183,7 +183,7 @@
       "poster": "https://image.tmdb.org/t/p/w185/w90dGS6D2lVO4aO5rdQ8QECrUGY.jpg"
     }
   ],
-  "updatedAt": "2026-06-21T20:52:04.684014+00:00",
+  "updatedAt": "2026-06-22T18:05:58.736573+00:00",
   "source": "boxofficemojo.com",
   "posterSource": "themoviedb.org",
   "status": "ok"
