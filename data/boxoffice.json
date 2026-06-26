@@ -72,7 +72,7 @@
       "weeksInRelease": 3,
       "distributor": "Amazon MGM Studios",
       "isNew": false,
-      "poster": "https://image.tmdb.org/t/p/w185/3YMd9Ogae4rDKLWuAZFuse9xhc5.jpg"
+      "poster": "https://image.tmdb.org/t/p/w185/vd1UJE1fYTLQX2z8ulhf8U2uo5E.jpg"
     },
     {
       "rank": 7,
@@ -183,7 +183,7 @@
       "poster": "https://image.tmdb.org/t/p/w185/xTI42pmsP5EDnvsNJPEDubwWBQO.jpg"
     }
   ],
-  "updatedAt": "2026-06-26T18:15:28.187977+00:00",
+  "updatedAt": "2026-06-26T22:47:47.823575+00:00",
   "source": "boxofficemojo.com",
   "posterSource": "themoviedb.org",
   "status": "ok"
