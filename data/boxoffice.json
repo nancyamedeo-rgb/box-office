@@ -12,7 +12,7 @@
       "weeksInRelease": 1,
       "distributor": "Walt Disney Studios Motion Pictures",
       "isNew": true,
-      "poster": "https://image.tmdb.org/t/p/w185/a6H2U7pjibMia41TwyFVd1PVQw3.jpg"
+      "poster": "https://image.tmdb.org/t/p/w185/pxG26JdyuiDvJbSoucknaFiLeZD.jpg"
     },
     {
       "rank": 2,
@@ -72,7 +72,7 @@
       "weeksInRelease": 3,
       "distributor": "Amazon MGM Studios",
       "isNew": false,
-      "poster": "https://image.tmdb.org/t/p/w185/vd1UJE1fYTLQX2z8ulhf8U2uo5E.jpg"
+      "poster": "https://image.tmdb.org/t/p/w185/3YMd9Ogae4rDKLWuAZFuse9xhc5.jpg"
     },
     {
       "rank": 7,
@@ -161,10 +161,10 @@
     {
       "rank": 14,
       "title": "The Breadwinner",
-      "weekendGross": 851103,
-      "changePct": "-44%",
+      "weekendGross": 868882,
+      "changePct": "-42.8%",
       "theaters": 802,
-      "totalGross": 19298952,
+      "totalGross": 19316731,
       "weeksInRelease": 4,
       "distributor": "Sony Pictures Releasing",
       "isNew": false,
@@ -183,7 +183,7 @@
       "poster": "https://image.tmdb.org/t/p/w185/xTI42pmsP5EDnvsNJPEDubwWBQO.jpg"
     }
   ],
-  "updatedAt": "2026-06-26T22:47:47.823575+00:00",
+  "updatedAt": "2026-06-27T09:34:28.391953+00:00",
   "source": "boxofficemojo.com",
   "posterSource": "themoviedb.org",
   "status": "ok"
