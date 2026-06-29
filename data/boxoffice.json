@@ -60,7 +60,7 @@
       "weeksInRelease": 3,
       "distributor": "Universal Pictures",
       "isNew": false,
-      "poster": "https://image.tmdb.org/t/p/w185/3o5YPjDGDTcTDL5ftDA9NwN9dLd.jpg"
+      "poster": "https://image.tmdb.org/t/p/w185/AnJ8IQJI23hNpYXVNaythu061Ru.jpg"
     },
     {
       "rank": 6,
@@ -183,7 +183,7 @@
       "poster": "https://image.tmdb.org/t/p/w185/4apG9Xk6HQvV48JKEjSUeiebju7.jpg"
     }
   ],
-  "updatedAt": "2026-06-28T21:47:20.697930+00:00",
+  "updatedAt": "2026-06-29T14:52:39.878709+00:00",
   "source": "boxofficemojo.com",
   "posterSource": "themoviedb.org",
   "status": "ok"
