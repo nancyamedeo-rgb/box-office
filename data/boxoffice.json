@@ -36,7 +36,7 @@
       "weeksInRelease": 7,
       "distributor": "Focus Features",
       "isNew": false,
-      "poster": "https://image.tmdb.org/t/p/w185/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg"
+      "poster": "https://image.tmdb.org/t/p/w185/doQPOCVlIWZBRC2ZVsSXHi0luL8.jpg"
     },
     {
       "rank": 4,
@@ -183,7 +183,7 @@
       "poster": "https://image.tmdb.org/t/p/w185/iKy5460GdsoknM8ppmGlJbKxAKa.jpg"
     }
   ],
-  "updatedAt": "2026-06-30T11:31:47.848233+00:00",
+  "updatedAt": "2026-06-30T18:25:22.289638+00:00",
   "source": "boxofficemojo.com",
   "posterSource": "themoviedb.org",
   "status": "ok"
