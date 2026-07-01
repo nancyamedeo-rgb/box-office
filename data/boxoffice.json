@@ -12,7 +12,7 @@
       "weeksInRelease": 2,
       "distributor": "Walt Disney Studios Motion Pictures",
       "isNew": false,
-      "poster": "https://image.tmdb.org/t/p/w185/a6H2U7pjibMia41TwyFVd1PVQw3.jpg"
+      "poster": "https://image.tmdb.org/t/p/w185/pxG26JdyuiDvJbSoucknaFiLeZD.jpg"
     },
     {
       "rank": 2,
@@ -36,7 +36,7 @@
       "weeksInRelease": 7,
       "distributor": "Focus Features",
       "isNew": false,
-      "poster": "https://image.tmdb.org/t/p/w185/doQPOCVlIWZBRC2ZVsSXHi0luL8.jpg"
+      "poster": "https://image.tmdb.org/t/p/w185/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg"
     },
     {
       "rank": 4,
@@ -183,7 +183,7 @@
       "poster": "https://image.tmdb.org/t/p/w185/iKy5460GdsoknM8ppmGlJbKxAKa.jpg"
     }
   ],
-  "updatedAt": "2026-06-30T18:25:22.289638+00:00",
+  "updatedAt": "2026-07-01T11:46:24.075820+00:00",
   "source": "boxofficemojo.com",
   "posterSource": "themoviedb.org",
   "status": "ok"
